@@ -123,12 +123,19 @@ elif model == "Residual Income Model (RIM)":
     st.header("🟡 Residual Income Model")
     book_value = st.number_input("Book Value per Share (₹)", value=0.0)
     net_income = st.number_input("Net Income per Share (₹)", value=0.0)
-    equity_cost = st.number_input("Cost of Equity (%)", value=0.0)
+
+    st.subheader("📌 Cost of Equity via CAPM")
+    rf = st.number_input("Risk-Free Rate (%)", value=6.5)
+    beta = st.number_input("Beta (Volatility Relative to Market)", value=1.0)
+    market_return = st.number_input("Expected Market Return (%)", value=12.0)
 
     if st.button("📘 Calculate Intrinsic Value (RIM)"):
-        equity_charge = book_value * (equity_cost / 100)
+        cost_of_equity = rf + beta * (market_return - rf)
+        equity_charge = book_value * (cost_of_equity / 100)
         RI = net_income - equity_charge
-        intrinsic_value = book_value + RI / (equity_cost / 100)
+        intrinsic_value = book_value + RI / (cost_of_equity / 100)
+
+        st.success(f"Cost of Equity (CAPM): {cost_of_equity:.2f}%")
         st.success(f"Intrinsic Value (RIM): ₹{intrinsic_value:.2f}")
 
 # --------------------------
